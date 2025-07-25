@@ -48,11 +48,8 @@ test:
   requires:
     - pip
     - python
-    - coverage
-    - coveralls
-    - matplotlib
+    - matplotlib-base
     - pytest
-    - pytest-cov
     - pytest-xdist
     - scipy>=0.11
   source_files:
@@ -63,7 +60,7 @@ test:
   commands:
     - pip check
     - python -c "import access; print(access.__version__)"
-    - pytest -v {{ test_root }} -k "not ({{ skip_keywords | join(' or ') }})"
+    - pytest -n auto -v {{ test_root }} -k "not ({{ skip_keywords | join(' or ') }})"
 
 about:
   home: https://access.readthedocs.io/
