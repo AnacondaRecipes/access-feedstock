@@ -1,13 +1,19 @@
 {% set name = "access" %}
 {% set version = "1.1.9" %}
+{% set gh_src = "github_source_" ~ name ~ "-" ~ version %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 89d0043e3596854701b72c77dfedb677839a5b416a18362c222b7d321ad02138
+  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+    sha256: 89d0043e3596854701b72c77dfedb677839a5b416a18362c222b7d321ad02138
+
+   # tests and tests data files
+  - url: https://github.com/pysal/access/archive/refs/tags/v{{ version }}.tar.gz
+    sha256: f6cddb394abc4e1fa518d156fd1e6041e3c9b75c788ae7be074962a1ab08116e
+    folder: {{ gh_src }}
 
 build:
   number: 0
@@ -28,16 +34,36 @@ requirements:
     - python
     - requests >=2
 
-# Tests for this package are not included
+# =======================
+# Test configuration
+# =======================
+{% set test_root = gh_src ~ "/access/tests" %}
+
+# - TestEuclideanNeighbors: AssertionError
+{% set skip_keywords = [
+    "TestEuclideanNeighbors"
+] %}
+
 test:
   requires:
     - pip
     - python
+    - coverage
+    - coveralls
+    - matplotlib
+    - pytest
+    - pytest-cov
+    - pytest-xdist
+    - scipy>=0.11
+  source_files:
+    - {{ test_root }}
   imports:
     - access
+    - access.datasets
   commands:
     - pip check
     - python -c "import access; print(access.__version__)"
+    - pytest -v {{ test_root }} -k "not ({{ skip_keywords | join(' or ') }})"
 
 about:
   home: https://access.readthedocs.io/
