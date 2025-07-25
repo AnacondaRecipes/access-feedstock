@@ -39,7 +39,10 @@ requirements:
 # =======================
 {% set test_root = gh_src ~ "/access/tests" %}
 
-# - TestEuclideanNeighbors: AssertionError
+# - TestEuclideanNeighbors: 
+# Disabled due to failing assertion: expected distance 1.0, got 0.0
+# Likely caused by missing neighbors within the threshold or overlapping centroids
+# Needs review of test data or distance calculation logic in `create_euclidean_distance_neighbors`
 {% set skip_keywords = [
     "TestEuclideanNeighbors"
 ] %}
