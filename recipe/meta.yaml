@@ -42,7 +42,8 @@ requirements:
 # - TestEuclideanNeighbors: 
 # Disabled due to failing assertion: expected distance 1.0, got 0.0
 # Likely caused by missing neighbors within the threshold or overlapping centroids
-# Needs review of test data or distance calculation logic in `create_euclidean_distance_neighbors`
+# Needs review of test data or distance calculation logic in `test_euclidean.py:133`
+# https://github.com/pysal/access/blob/c2fc9a1a6c92a223ebe3157c1b4bc248eacc691f/access/tests/test_euclidean.py#L133
 {% set skip_keywords = [
     "TestEuclideanNeighbors"
 ] %}
