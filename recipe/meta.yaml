@@ -1,6 +1,5 @@
 {% set name = "access" %}
 {% set version = "1.1.9" %}
-{% set gh_src = "github_source_" ~ name ~ "-" ~ version %}
 
 package:
   name: {{ name|lower }}
@@ -13,7 +12,7 @@ source:
    # tests and tests data files
   - url: https://github.com/pysal/access/archive/refs/tags/v{{ version }}.tar.gz
     sha256: f6cddb394abc4e1fa518d156fd1e6041e3c9b75c788ae7be074962a1ab08116e
-    folder: {{ gh_src }}
+    folder: gh_src
 
 build:
   number: 0
@@ -37,7 +36,7 @@ requirements:
 # =======================
 # Test configuration
 # =======================
-{% set test_root = gh_src ~ "/access/tests" %}
+{% set test_root = "gh_src/access/tests" %}
 
 # - TestEuclideanNeighbors: 
 # Disabled due to failing assertion: expected distance 1.0, got 0.0
@@ -55,7 +54,7 @@ test:
     - matplotlib-base
     - pytest
     - pytest-xdist
-    - scipy>=0.11
+    - scipy >=0.11
   source_files:
     - {{ test_root }}
   imports:
@@ -63,20 +62,17 @@ test:
     - access.datasets
   commands:
     - pip check
-    - python -c "import access; print(access.__version__)"
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
     - pytest -n auto -v {{ test_root }} -k "not ({{ skip_keywords | join(' or ') }})"
 
 about:
-  home: https://access.readthedocs.io/
+  home: https://access.readthedocs.io
   license: BSD-3-Clause
   license_family: BSD
   license_file: LICENSE
-  summary: 'classical and novel measures of spatial accessibility to services'
-  description: |
-    access is a class and function for calculating the spatial accessibility
-    of resources.  It is designed for python 3.5 and higher.
-    Pandas (and numpy) are required, and geopandas allows for some additional functionality.
-  doc_url: https://access.readthedocs.io/
+  summary: Calculate spatial accessibility metrics
+  description: This package provides classical and novel measures of spatial accessibility to services
+  doc_url: https://access.readthedocs.io
   dev_url: https://github.com/pysal/access
 
 extra:
