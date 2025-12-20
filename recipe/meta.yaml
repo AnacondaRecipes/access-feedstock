@@ -1,17 +1,20 @@
 {% set name = "access" %}
-{% set version = "1.1.9" %}
+{% set version = "1.1.10.post3" %}
+{% set test_root = "gh_src/access/tests" %}
+{% set skip_keywords = [
+  "TestEuclideanNeighbors"
+] %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-    sha256: 89d0043e3596854701b72c77dfedb677839a5b416a18362c222b7d321ad02138
-
-   # tests and tests data files
+  - url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+    sha256: 3dbfbd7cc5a09d30ad314955d061fb46fd2d48ce1f84f15adc5b760bb8b4a34b
+  # tests and tests data files
   - url: https://github.com/pysal/access/archive/refs/tags/v{{ version }}.tar.gz
-    sha256: f6cddb394abc4e1fa518d156fd1e6041e3c9b75c788ae7be074962a1ab08116e
+    sha256: 7f4ed30a20b4db702d14d46e3adb0677f600823e104207bd4d181731018dab79
     folder: gh_src
 
 build:
@@ -36,17 +39,11 @@ requirements:
 # =======================
 # Test configuration
 # =======================
-{% set test_root = "gh_src/access/tests" %}
-
-# - TestEuclideanNeighbors: 
+# - TestEuclideanNeighbors:
 # Disabled due to failing assertion: expected distance 1.0, got 0.0
 # Likely caused by missing neighbors within the threshold or overlapping centroids
 # Needs review of test data or distance calculation logic in `test_euclidean.py:133`
 # https://github.com/pysal/access/blob/c2fc9a1a6c92a223ebe3157c1b4bc248eacc691f/access/tests/test_euclidean.py#L133
-{% set skip_keywords = [
-    "TestEuclideanNeighbors"
-] %}
-
 test:
   requires:
     - pip
