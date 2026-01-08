@@ -13,7 +13,7 @@ build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
   # The latest geopandas version supports Python 3.13
-  skip: true  # [py<311 and py>313]
+  skip: true  # [py<311 or py>313]
 
 requirements:
   host:
