@@ -1,69 +1,49 @@
 {% set name = "access" %}
-{% set version = "1.1.9" %}
+{% set version = "1.1.10.post3" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-    sha256: 89d0043e3596854701b72c77dfedb677839a5b416a18362c222b7d321ad02138
-
-   # tests and tests data files
-  - url: https://github.com/pysal/access/archive/refs/tags/v{{ version }}.tar.gz
-    sha256: f6cddb394abc4e1fa518d156fd1e6041e3c9b75c788ae7be074962a1ab08116e
-    folder: gh_src
+  url: https://github.com/pysal/access/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 7f4ed30a20b4db702d14d46e3adb0677f600823e104207bd4d181731018dab79
 
 build:
   number: 0
-  skip: true  # [py<37]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
+  # The latest geopandas version supports Python 3.13
+  skip: true  # [py<311 or py>313]
 
 requirements:
   host:
     - python
     - pip
+    - wheel
     - setuptools >=61.0
     - setuptools-scm >=6.2
-    - wheel
+    - toml
   run:
-    - geopandas
-    - numpy >=1.3
-    - pandas >=0.23.4
     - python
-    - requests >=2
-
-# =======================
-# Test configuration
-# =======================
-{% set test_root = "gh_src/access/tests" %}
-
-# - TestEuclideanNeighbors: 
-# Disabled due to failing assertion: expected distance 1.0, got 0.0
-# Likely caused by missing neighbors within the threshold or overlapping centroids
-# Needs review of test data or distance calculation logic in `test_euclidean.py:133`
-# https://github.com/pysal/access/blob/c2fc9a1a6c92a223ebe3157c1b4bc248eacc691f/access/tests/test_euclidean.py#L133
-{% set skip_keywords = [
-    "TestEuclideanNeighbors"
-] %}
+    - geopandas >=1.0.1
+    - numpy >=1.26.0
+    - pandas >=2.1.0
+    - scipy >=1.14.1
 
 test:
-  requires:
-    - pip
-    - python
-    - matplotlib-base
-    - pytest
-    - pytest-xdist
-    - scipy >=0.11
-  source_files:
-    - {{ test_root }}
   imports:
     - access
     - access.datasets
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - pytest -n auto -v {{ test_root }} -k "not ({{ skip_keywords | join(' or ') }})"
+    - pytest --pyargs access
+  requires:
+    - pip
+    - pytest
+    - pytest-xdist
+    - matplotlib-base
+    - scipy >=1.14.1
 
 about:
   home: https://access.readthedocs.io
@@ -71,7 +51,8 @@ about:
   license_family: BSD
   license_file: LICENSE
   summary: Calculate spatial accessibility metrics
-  description: This package provides classical and novel measures of spatial accessibility to services
+  description: |
+    This package provides classical and novel measures of spatial accessibility to services
   doc_url: https://access.readthedocs.io
   dev_url: https://github.com/pysal/access
 
