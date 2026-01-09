@@ -51,7 +51,8 @@ about:
   license_family: BSD
   license_file: LICENSE
   summary: Calculate spatial accessibility metrics
-  description: This package provides classical and novel measures of spatial accessibility to services
+  description: |
+    This package provides classical and novel measures of spatial accessibility to services
   doc_url: https://access.readthedocs.io
   dev_url: https://github.com/pysal/access
 
