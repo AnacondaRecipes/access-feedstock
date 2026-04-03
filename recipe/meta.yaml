@@ -1,5 +1,5 @@
 {% set name = "access" %}
-{% set version = "1.1.10" %}
+{% set version = "1.1.10.post3" %}
 
 package:
   name: {{ name }}
@@ -7,10 +7,10 @@ package:
 
 source:
   url: https://github.com/pysal/access/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: d34bf16dec72edce286ba3c646a747d55ed664f8ad9eb095551c0dbc7122f3bf
+  sha256: 7f4ed30a20b4db702d14d46e3adb0677f600823e104207bd4d181731018dab79
 
 build:
-  number: 0
+  number: 1
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
   skip: true  # [py<311]
 
